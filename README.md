@@ -18,8 +18,6 @@ Claude Code:
 git clone https://github.com/adamholter/unslop.git ~/.claude/skills/unslop
 ```
 
-The skill works on its own. Its final section also explains when a finished draft is worth sending through Toolbox's paid `writing.lint` action.
-
 ## Files
 
 - `SKILL.md`: the complete skill and all anti-patterns

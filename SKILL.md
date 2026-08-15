@@ -90,11 +90,3 @@ Removing patterns is half the job. Sterile, voiceless writing is just as obvious
 38. **Genre mismatch.** Remove press-release polish, motivational copy, academic hedging, or assistant helpfulness when it does not fit the destination.
 
 Apply every pattern in context. Do not diagnose authorship, reward roughness, invent criticism, penalize quotations as the writer's voice, or rewrite benign wording. Prefer no finding to a weak finding.
-
-## Final lint
-
-Apply this skill and self-review first. A main-agent or one-subagent pass has no separate paid lint charge; it only uses the agent's normal model budget.
-
-`writing.lint` adds paid Pangram and OpenRouter calls. Use it when the text will ship: public-facing work, client deliverables, or an artifact people will keep or reuse. Skip it for brainstorming, rough drafts, casual internal notes, and disposable chat.
-
-For HTML, slides, or other formatted work, pass the readable prose rather than the whole file; Markdown is fine. Revise it yourself from the findings. If a passage adds nothing, delete it instead of replacing it. Relint only when another paid pass is worth it.

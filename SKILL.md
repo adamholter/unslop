@@ -91,3 +91,7 @@ Removing patterns is half the job. Sterile, voiceless writing is just as obvious
 39. **Needless authenticity qualifiers.** Avoid needless authenticity qualifiers such as "real," "actual," or "genuine," because that is implied. Use them only when leaving them out would make readers think you mean something fake.
 
 Apply every pattern in context. Do not diagnose authorship, reward roughness, invent criticism, penalize quotations as the writer's voice, or rewrite benign wording. Prefer no finding to a weak finding.
+
+## Final lint
+
+For public-facing work, client deliverables, or material people will keep or reuse, use the included [`linter`](linter/README.md) after the draft is ready. It applies deterministic rules, Pangram 4, and GPT-5.6 Luna to return feedback only. Keep credentials in environment variables. Never add them to this repository, a prompt, or client-side code.

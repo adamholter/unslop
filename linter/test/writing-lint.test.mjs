@@ -5,6 +5,9 @@ import { deterministicFindings, runWritingLint, textForLint } from "../src/writi
 test("simplifies formatted prose and finds deterministic rules", () => {
   assert.equal(textForLint("<p>In conclusion, <b>use facts</b>.</p>", "html").text, "In conclusion, use facts .");
   assert.equal(deterministicFindings("In conclusion, this is a game-changer.").length, 2);
+  const broadCatalogFindings = deterministicFindings("Embark on a transformative journey. Then you write. Now you grow.");
+  assert.equal(broadCatalogFindings.length, 2);
+  assert.match(broadCatalogFindings[1].problem, /then_now/);
 });
 
 test("runs Pangram then Luna without exposing credentials", async () => {

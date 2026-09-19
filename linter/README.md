@@ -4,7 +4,7 @@ This is the portable final-review pipeline used by Unslop. It keeps editing deci
 
 It runs in this order:
 
-1. Deterministic checks for stock phrases and bloated paragraphs.
+1. The complete Unslop pattern engine: 106 lexical checks, 460 phrase patterns, and 11 structural rules, plus bloated-paragraph detection.
 2. Pangram 4 through Pangram's task API.
 3. GPT-5.6 Luna at xhigh reasoning through OpenRouter, with every Unslop rule in the prompt and the Pangram result as evidence, not a verdict.
 

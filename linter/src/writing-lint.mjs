@@ -1,23 +1,11 @@
 import { readFile } from "node:fs/promises";
+import { lintText } from "./pattern-engine.mjs";
 
 const PANGRAM_ENDPOINT = "https://text.external-api.pangram.com";
 const PANGRAM_MODEL = "pangram-4";
 const OPENROUTER_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions";
 const LUNA_MODEL = "openai/gpt-5.6-luna";
 const MAX_CHARS = 80_000;
-
-const phrasePatterns = [
-  "in today's fast-paced", "in today's ever-changing", "in today's ever-evolving",
-  "in the ever-evolving", "in the rapidly evolving", "it is important to note",
-  "it's important to note", "it is worth noting", "delve into", "dive into",
-  "a testament to", "stands as a testament", "at the end of the day", "when it comes to",
-  "in conclusion", "in summary", "without further ado", "game-changer", "game changer",
-  "unlock the potential", "unlocking the potential", "navigate the complexities",
-  "the landscape of", "the realm of", "a myriad of", "seamlessly", "robust solution",
-  "leverage the power", "harness the power", "more than just", "not just", "isn't just",
-  "not only", "it's not about", "the key takeaway", "here's the thing", "the truth is",
-  "let's explore", "let's dive", "whether you're", "from x to y", "paradigm shift",
-];
 
 function fail(message, status) {
   return Object.assign(new Error(message), { status });
@@ -65,15 +53,16 @@ export function textForLint(value, format = "auto") {
 }
 
 export function deterministicFindings(text) {
-  const lower = text.toLowerCase();
-  const findings = [];
-  for (const phrase of phrasePatterns) {
-    let index = lower.indexOf(phrase);
-    while (index >= 0 && findings.length < 40) {
-      findings.push({ source: "rules", severity: "medium", start: index, end: index + phrase.length, excerpt: text.slice(index, index + phrase.length), problem: `Stock AI phrasing: "${text.slice(index, index + phrase.length)}".`, suggestion: "Say the concrete point directly, or delete the sentence if it adds no information.", fix: "revise" });
-      index = lower.indexOf(phrase, index + phrase.length);
-    }
-  }
+  const findings = lintText(text).map((match) => ({
+    source: "rules",
+    severity: match.families.includes("structural") ? "medium" : "low",
+    start: match.start,
+    end: match.end,
+    excerpt: match.text,
+    problem: `Unslop ${match.families.join("/")} rule: ${match.rules.join(", ")}.`,
+    suggestion: "Say the concrete point directly, or delete the sentence if it adds no information.",
+    fix: "revise",
+  }));
   for (const paragraph of text.split(/\n\s*\n/).map((value) => value.trim()).filter(Boolean)) {
     const sentences = paragraph.split(/(?<=[.!?])\s+/).filter(Boolean);
     if (paragraph.split(/\s+/).length > 110 && sentences.length >= 5) findings.push({ source: "rules", severity: "medium", excerpt: paragraph.slice(0, 180), problem: "This paragraph is long enough that excess explanation may be the AI tell.", suggestion: "Delete any sentence that does not change the reader's understanding before rewriting what remains.", fix: "delete" });
